@@ -3,7 +3,6 @@ from configparser import ConfigParser
 
 def config(filename='database/database.ini', section='postgresql'):
     parser = ConfigParser()
-#    breakpoint()
     parser.read(filename)
     db={}
     if parser.has_section(section):
