@@ -10,7 +10,7 @@ Dependencies:
 - datetime: Used for converting source data's date to one single datetime value.
 - SQLAlchemy: Used for checking database process errors.
 - Session: Used for opening a session for database writing.
-- Crime: The ORM Model Class for Crimes
+- Crime: The ORM Model Class for crimes.
 '''
 import csv
 from datetime import datetime

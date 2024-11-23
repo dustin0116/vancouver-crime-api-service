@@ -11,6 +11,7 @@ Dependencies:
 - FastAPI: Used to run app as a FastAPI service.
 - process: Used to run the data initialization process for the crime source data.
 - init_db: Used to initialize the crimes table for the database.
+- Crime: The ORM Model Class for crimes.
 - crimes: Used to set up ORM Base model and Session.
 '''
 import logging
