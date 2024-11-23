@@ -1,12 +1,9 @@
 CREATE TABLE IF NOT EXISTS crimes (
-	  type VARCHAR(150)
-		year INT
-		month INT
-		day INT
-		hour INT
-		minute INT
-		hundred_block CHAR(100)
-		neighborhood CHAR(100)
-		x VARCHAR(100)
-		y VARCHAR(100)
+	  id INT4 PRIMARY KEY
+		case VARCHAR
+		event_datetime TIMESTAMP
+		hundred_block VARCHAR
+		neighborhood VARCHAR
+		x VARCHAR
+		y VARCHAR
 ); 
