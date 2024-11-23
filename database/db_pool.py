@@ -33,10 +33,13 @@ def query_total_crimes_by_year(year: int, conn):
     conn.close()
     return count
 
-def is_crimes_table_empty():
-    from .models import Crimes
+def is_table_empty(table_class):
     session = Session()
     try:
-        return not session.query(Crimes).first()
+        return not session.query(table_class).first()
+    except sqlalchemy.exc.ProgrammingError:
+        # Handle case where the table does not exist
+        return True
     finally:
         session.close()
+
