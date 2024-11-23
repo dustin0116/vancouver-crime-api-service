@@ -23,3 +23,20 @@ def init_db():
     # Create the tables in the database
     Base.metadata.create_all(bind=engine)
 
+def query_total_crimes_by_year(year: int, conn):
+    sql = f'''SELECT COUNT(year) from crimes
+          WHERE year = {year};'''
+    cur = conn.cursor()
+    cur.execute(sql)
+    count = cur.fetchone()[0]
+    cur.close()
+    conn.close()
+    return count
+
+def is_crimes_table_empty():
+    from .models import Crimes
+    session = Session()
+    try:
+        return not session.query(Crimes).first()
+    finally:
+        session.close()

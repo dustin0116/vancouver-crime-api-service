@@ -7,9 +7,11 @@ from .database.data_initialize import process
 logging.basicConfig()
 logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)  # Logs SQL statements
 
-init_db()
-process()
-
 app = FastAPI()
+
+@app.on_event("startup")
+async def startup_event():
+    init_db()
+    process()
 
 app.include_router(crimes.router)
