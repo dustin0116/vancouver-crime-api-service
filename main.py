@@ -19,8 +19,8 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from .database.data_initialize import is_table_empty, process
-from .database.db_pool import init_db
+from .database.pool import init_db
+from .database.utilities import is_table_empty, load_csv_data
 from .models.crime_orm import Crime
 from .routers import crimes
 
@@ -34,7 +34,7 @@ async def lifespan(_: FastAPI):
     init_db()
     if is_table_empty(Crime):
         logging.info("Crime table is empty. Populating data...")
-        process()
+        load_csv_data()
     else:
         logging.info("Crime table already populated.")
     yield

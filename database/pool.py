@@ -1,6 +1,6 @@
 '''
-db_pool.py
-----------
+pool.py
+-------
 
 This module sets up the database connection pool.
 

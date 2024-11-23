@@ -1,8 +1,8 @@
 '''
-data_initialize.py
-------------------
+utilities.py
+------------
 
-This module loads the crime data from the csv source to the database.
+This module includes all utilities and data processing actions to the database.
 
 Dependencies:
 -------------
@@ -18,10 +18,10 @@ from datetime import datetime
 from sqlalchemy.exc import ProgrammingError, SQLAlchemyError
 
 from ..models.crime_orm import Crime
-from .db_pool import Session
+from .pool import Session
 
 
-def process():
+def load_csv_data():
     '''Process the source csv dataset to the database.'''
     session = Session()
     with open(
