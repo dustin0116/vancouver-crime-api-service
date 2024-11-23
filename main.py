@@ -25,7 +25,7 @@ from .database.models import Crime
 from .routers import crimes
 
 logging.basicConfig()
-logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)  # Logs SQL statements
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)  # Logs SQL statements
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
