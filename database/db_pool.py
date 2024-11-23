@@ -1,15 +1,30 @@
+'''
+db_pool.py
+----------
+
+This module sets up the database connection pool.
+
+Dependencies:
+-------------
+- os: Used for retrieving environment variables.
+- dotenv: Used to load environment variables from .env 
+- SQLAlchemy: Used to set up ORM Base model and Session.
+'''
 import os
+
 import dotenv
 import sqlalchemy
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
 # Load environment variables from .env
 dotenv.load_dotenv()
 
 # Build database URL
-DATABASE_URL = f'''postgresql://{os.getenv('DB_USERNAME')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}'''
-
+DATABASE_URL = (
+    f'''postgresql://{os.getenv('DB_USERNAME')}:{os.getenv('DB_PASSWORD')}''' +
+    f'''@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}'''
+)
 # SQLAlchemy Engine
 engine = sqlalchemy.create_engine(DATABASE_URL, pool_size=20)
 
@@ -20,23 +35,5 @@ Base = declarative_base()
 Session = sessionmaker(autocommit=False, bind=engine)
 
 def init_db():
-    # Create the tables in the database
+    ''' Initializes the crimes table in the database '''
     Base.metadata.create_all(bind=engine)
-
-def query_total_crimes_by_year(year: int, conn):
-    sql = f'''SELECT COUNT(year) from crimes
-          WHERE year = {year};'''
-    cur = conn.cursor()
-    cur.execute(sql)
-    count = cur.fetchone()[0]
-    cur.close()
-    conn.close()
-    return count
-
-def is_crimes_table_empty():
-    from .models import Crimes
-    session = Session()
-    try:
-        return not session.query(Crimes).first()
-    finally:
-        session.close()

@@ -1,12 +1,34 @@
+'''
+data_initialize.py
+------------------
+
+This module loads the crime data from the csv source to the database.
+
+Dependencies:
+-------------
+- csv: Used for reading csv source file.
+- datetime: Used for converting source data's date to one single datetime value
+- SQLAlchemy: Used for checking database process errors.
+- Session: Used for opening a session for database writing
+- Crimes: The ORM Model Class for Crimes
+'''
 import csv
-from .models import Crimes
-from .db_pool import Session
 from datetime import datetime
+
 from sqlalchemy.exc import SQLAlchemyError
 
+from .db_pool import Session
+from .models import Crimes
+
+
 def process():
+    '''Process the source csv dataset to the database'''
     session = Session()
-    with open ('data/crimedata_csv_AllNeighbourhoods_AllYears.csv', 'r') as f:
+    with open(
+        'sourcedata/crimedata_csv_AllNeighbourhoods_AllYears.csv',
+        'r',
+        encoding='utf-8'
+    ) as f:
         reader = csv.DictReader(f)
         entries = []
         # Prepare table entries
@@ -36,3 +58,10 @@ def process():
             print(f'An error occurred: {e}')
         finally:
             session.close()
+
+def is_crimes_table_empty():
+    session = Session()
+    try:
+        return not session.query(Crimes).first()
+    finally:
+        session.close()
