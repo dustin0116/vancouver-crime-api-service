@@ -1,5 +1,5 @@
 '''
-models.py
+crime_orm.py
 ---------
 
 This module contains utility functions and ORM model for the crimes table
@@ -11,7 +11,7 @@ Dependencies:
 '''
 from sqlalchemy import Column, DateTime, Integer, String
 
-from .db_pool import Base
+from ..database.db_pool import Base
 
 
 class Crime(Base):

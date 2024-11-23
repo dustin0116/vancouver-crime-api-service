@@ -21,7 +21,7 @@ from fastapi import FastAPI
 
 from .database.data_initialize import is_table_empty, process
 from .database.db_pool import init_db
-from .database.models import Crime
+from .models.crime_orm import Crime
 from .routers import crimes
 
 logging.basicConfig()

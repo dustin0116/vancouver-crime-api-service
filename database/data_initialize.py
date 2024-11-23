@@ -17,8 +17,8 @@ from datetime import datetime
 
 from sqlalchemy.exc import ProgrammingError, SQLAlchemyError
 
+from ..models.crime_orm import Crime
 from .db_pool import Session
-from .models import Crime
 
 
 def process():

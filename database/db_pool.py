@@ -37,13 +37,3 @@ Session = sessionmaker(autocommit=False, bind=engine)
 def init_db():
     ''' Initializes the crimes table in the database. '''
     Base.metadata.create_all(bind=engine)
-
-def is_table_empty(table_class):
-    session = Session()
-    try:
-        return not session.query(table_class).first()
-    except sqlalchemy.exc.ProgrammingError:
-        # Handle case where the table does not exist
-        return True
-    finally:
-        session.close()
