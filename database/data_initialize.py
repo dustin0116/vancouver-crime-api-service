@@ -9,6 +9,7 @@ def process():
     with open ('data/crimedata_csv_AllNeighbourhoods_AllYears.csv', 'r') as f:
         reader = csv.DictReader(f)
         entries = []
+        # Prepare table entries
         for row in reader:
             # Combine the columns into a single datetime object
             year = int(row['YEAR'])
@@ -27,6 +28,7 @@ def process():
             )
             entries.append(row_data)
         try:
+            # Insert table entries`
             session.add_all(entries)
             session.commit()
         except SQLAlchemyError as e:

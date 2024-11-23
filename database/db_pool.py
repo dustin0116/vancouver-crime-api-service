@@ -10,7 +10,6 @@ dotenv.load_dotenv()
 # Build database URL
 DATABASE_URL = f'''postgresql://{os.getenv('DB_USERNAME')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}'''
 
-print(DATABASE_URL)
 # SQLAlchemy Engine
 engine = sqlalchemy.create_engine(DATABASE_URL, pool_size=20)
 

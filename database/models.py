@@ -1,8 +1,6 @@
 from .db_pool import Base
 from sqlalchemy import Column, Integer, String, DateTime
 
-def test():
-    print('test')
 class Crimes(Base):
     __tablename__ = 'crimes'
 
