@@ -6,17 +6,17 @@ This module contains utility functions and ORM model for the crimes table
 
 Dependencies:
 -------------
-- SQLAlchemy: Used for ORM mapping
-- Base: Used for SQLAlchemy model registry
+- SQLAlchemy: Used for ORM mapping.
+- Base: Used for SQLAlchemy model registry.
 '''
 from sqlalchemy import Column, DateTime, Integer, String
 
 from .db_pool import Base
 
 
-class Crimes(Base):
+class Crime(Base):
     '''
-    Represents a crime event from the database
+    Represents a crime event from the database.
 
     Attributes:
         id (int): Unique ID for the crime event. Primary Key.
@@ -38,9 +38,9 @@ class Crimes(Base):
     y = Column(String)
 
     def get_event_datetime(self):
-        ''' Get Date and Time'''
+        ''' Get Date and Time. '''
         return self.event_datetime
 
     def get_coordinates(self):
-        ''' Get coordinates of the crime'''
+        ''' Get coordinates of the crime. '''
         return self.x, self.y

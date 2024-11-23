@@ -7,22 +7,22 @@ This module loads the crime data from the csv source to the database.
 Dependencies:
 -------------
 - csv: Used for reading csv source file.
-- datetime: Used for converting source data's date to one single datetime value
+- datetime: Used for converting source data's date to one single datetime value.
 - SQLAlchemy: Used for checking database process errors.
-- Session: Used for opening a session for database writing
-- Crimes: The ORM Model Class for Crimes
+- Session: Used for opening a session for database writing.
+- Crime: The ORM Model Class for Crimes
 '''
 import csv
 from datetime import datetime
 
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import ProgrammingError, SQLAlchemyError
 
 from .db_pool import Session
-from .models import Crimes
+from .models import Crime
 
 
 def process():
-    '''Process the source csv dataset to the database'''
+    '''Process the source csv dataset to the database.'''
     session = Session()
     with open(
         'sourcedata/crimedata_csv_AllNeighbourhoods_AllYears.csv',
@@ -40,7 +40,7 @@ def process():
             hour = int(row['HOUR'])
             minute = int(row['MINUTE'])
             event_datetime = datetime(year, month, day, hour, minute)
-            row_data = Crimes(
+            row_data = Crime(
                 case = row['TYPE'],
                 event_datetime = event_datetime,
                 hundred_block = row['HUNDRED_BLOCK'],
@@ -59,9 +59,21 @@ def process():
         finally:
             session.close()
 
-def is_crimes_table_empty():
+def is_table_empty(table_class):
+    '''
+    Check if table is empty.
+
+    Args:
+        table_class (class): The ORM model class.
+
+    Raises:
+        ProgrammingError: If table doesn't exist.
+    '''
     session = Session()
     try:
-        return not session.query(Crimes).first()
+        return not session.query(table_class).first()
+    except ProgrammingError:
+        # Handle case where the table does not exist
+        return True
     finally:
         session.close()

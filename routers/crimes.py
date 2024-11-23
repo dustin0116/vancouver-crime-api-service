@@ -14,5 +14,5 @@ router = APIRouter(prefix='/crimes')
 
 @router.get('/total-crimes-{year}')
 async def read_total_crimes_by_year(year: int):
-    '''Returns the total number of crimes in the specified year'''
+    ''' Returns the total number of crimes in the specified year. '''
     return { 'message': year }

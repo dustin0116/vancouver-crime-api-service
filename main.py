@@ -18,8 +18,9 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from .database.data_initialize import process
+from .database.data_initialize import is_table_empty, process
 from .database.db_pool import init_db
+from .database.models import Crime
 from .routers import crimes
 
 logging.basicConfig()
@@ -27,9 +28,14 @@ logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)  # Logs SQL statem
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    ''' Startup of the service initializes the table and processes the csv data'''
+    ''' Startup of the service initializes the table and processes the csv data. '''
+    logging.info("Initializing database...")
     init_db()
-    process()
+    if is_table_empty(Crime):
+        logging.info("Crime table is empty. Populating data...")
+        process()
+    else:
+        logging.info("Crime table already populated.")
     yield
 
 app = FastAPI(lifespan=lifespan)
