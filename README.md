@@ -21,6 +21,7 @@ psycopg2
     pip install psycopg2
 
 python-dotenv
+
     pip install python-dotenv
 
 ## How to Run
