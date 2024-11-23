@@ -20,5 +20,8 @@ psycopg2
 
     pip install psycopg2
 
+python-dotenv
+    pip install python-dotenv
+
 ## How to Run
     DB_USERNAME=<YOUR_USERNAME> DB_PASSWORD=<YOUR_PASSWORD> fastapi dev main.py
