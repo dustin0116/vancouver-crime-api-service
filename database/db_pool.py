@@ -25,6 +25,7 @@ Session = sessionmaker(autocommit=False, bind=engine)
 
 def init_db():
     # Create the tables in the database
+    from .models import Crimes
     Base.metadata.create_all(bind=engine)
 
 def query_total_crimes_by_year(year: int, conn):
@@ -37,34 +38,47 @@ def query_total_crimes_by_year(year: int, conn):
     conn.close()
     return count
 
+def is_crimes_table_empty():
+    from .models import Crimes
+    session = Session()
+    try:
+        return not session.query(Crimes).first()
+    finally:
+        session.close()
+
 def process():
     from .models import Crimes
     session = Session()
-    with open ('data/crimedata_csv_AllNeighbourhoods_AllYears.csv', 'r') as f:
-        reader = csv.DictReader(f)
-        entries = []
-        for row in reader:
-            # Combine the columns into a single datetime object
-            year = int(row['YEAR'])
-            month = int(row['MONTH'])
-            day = int(row['DAY'])
-            hour = int(row['HOUR'])
-            minute = int(row['MINUTE'])
-            event_datetime = datetime(year, month, day, hour, minute)
-            row_data = Crimes(
-                case = row['TYPE'],
-                event_datetime = event_datetime,
-                hundred_block = row['HUNDRED_BLOCK'],
-                neighborhood = row['NEIGHBOURHOOD'],
-                x = row['X'],
-                y = row['Y']
-            )
-            entries.append(row_data)
-        try:
-            session.add_all(entries)
-            session.commit()
-        except SQLAlchemyError as e:
-            session.rollback()
-            print(f'An error occurred: {e}')
-        finally:
-            session.close()
+
+    # Populate only if table is empty
+    if is_crimes_table_empty():
+        with open ('data/crimedata_csv_AllNeighbourhoods_AllYears.csv', 'r') as f:
+            reader = csv.DictReader(f)
+            entries = []
+            for row in reader:
+                # Combine the columns into a single datetime object
+                year = int(row['YEAR'])
+                month = int(row['MONTH'])
+                day = int(row['DAY'])
+                hour = int(row['HOUR'])
+                minute = int(row['MINUTE'])
+                event_datetime = datetime(year, month, day, hour, minute)
+                row_data = Crimes(
+                    case = row['TYPE'],
+                    event_datetime = event_datetime,
+                    hundred_block = row['HUNDRED_BLOCK'],
+                    neighborhood = row['NEIGHBOURHOOD'],
+                    x = row['X'],
+                    y = row['Y']
+                )
+                entries.append(row_data)
+            try:
+                session.add_all(entries)
+                session.commit()
+            except SQLAlchemyError as e:
+                session.rollback()
+                print(f'An error occurred: {e}')
+            finally:
+                session.close()
+    else:
+        print("Crimes table already populated.")
