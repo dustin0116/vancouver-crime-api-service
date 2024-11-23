@@ -1,8 +1,13 @@
+import logging
 from fastapi import FastAPI
 from .routers import crimes
-from .database import database
+from .database.db_pool import init_db, process
 
-database.initialize_crimes()
+logging.basicConfig()
+logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)  # Logs SQL statements
+
+init_db()
+#process()
 
 app = FastAPI()
 
