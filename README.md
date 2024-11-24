@@ -1,4 +1,4 @@
-# Vancouver Crime Data Visualization - Backend
+# Vancouver Crime Map - API Service
 The backend service for the Vancouver crime data visualization.
 
 Data from [GeoDASH VPD Open Data](https://geodash.vpd.ca/opendata/#).
