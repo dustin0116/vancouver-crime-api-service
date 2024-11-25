@@ -18,19 +18,24 @@ from decimal import Decimal
 
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from sqlalchemy import extract, select, func
+from sqlalchemy import extract, func, select
 
-from ..database.pool import Session
+from ..database.pool import SessionLocal
 from ..models.crime_orm import Crime
 
 logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)  # Logs SQL statements
 
 router = APIRouter()
-session = Session()
+session = SessionLocal()
 
 def crime_json(crime):
-    ''' Get JSON of a crime '''
+    '''
+    Get JSON of a crime
+
+    Args:
+        crime (class): The Crime class.
+    '''
     return {
         'id': crime.id,
         'case': crime.case,
@@ -52,12 +57,16 @@ async def read_all_years():
                             if isinstance(year, Decimal)
                             else year for year in distinct_years
                          ])
-
         return JSONResponse(content={'years': distinct_years})
 
 @router.get('/crimes/{year}')
 async def read_all_crimes(year: int):
-    ''' Returns all of the crimes within the specified year in the database. '''
+    '''
+    Returns all of the crimes within the specified year in the database.
+
+    Args:
+        year (int): The specified year.
+    '''
     with session.begin():
         start_date = datetime(year, 1, 1)
         end_date = datetime(year+1, 1, 1)
@@ -73,11 +82,15 @@ async def read_all_crimes(year: int):
 
 @router.get('/crime-frequency/{year}')
 async def get_crime_frequency(year: int):
-    ''' Returns crime frequency by neighborhood for a specific year. '''
+    '''
+    Returns crime frequency by neighborhood for a specific year.
+
+    Args:
+        year (int): The specified year.
+    '''
     with session.begin():
         start_date = datetime(year, 1, 1)
         end_date = datetime(year+1, 1, 1)
-
         # Count crimes per neighborhood for the given year
         query = (
             select(Crime.neighborhood, func.count(Crime.id))
@@ -85,15 +98,13 @@ async def get_crime_frequency(year: int):
             .where(Crime.event_datetime < end_date)
             .group_by(Crime.neighborhood)
         )
-
         result = session.execute(query).all()
-
         # Convert to a format suitable for frontend
         crime_frequency = [
             {
                 'neighborhood': row[0],
                 'crimeCount': row[1]
-            } for row in result
+            }
+            for row in result
         ]
-
         return JSONResponse(content=crime_frequency)

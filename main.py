@@ -9,10 +9,13 @@ Dependencies:
 - logging: Used for SQLAlchemy logging.
 - asynccontextmanager: Used for the service's startup and shutdown tasks.
 - FastAPI: Used to run app as a FastAPI service.
+- CORSMiddleware: Used to set up the CORS Middleware
 - process: Used to run the data initialization process for the crime source data.
 - init_db: Used to initialize the crimes table for the database.
+- is_table_empty: Used to check if a table is empty.
+- load_csv_data: Used to load csv data into the database.
 - Crime: The ORM Model Class for crimes.
-- crimes: Used to set up ORM Base model and Session.
+- crimes: The crimes API route.
 '''
 import logging
 from contextlib import asynccontextmanager
@@ -52,4 +55,3 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
 )
-

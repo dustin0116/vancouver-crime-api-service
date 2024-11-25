@@ -32,7 +32,7 @@ engine = sqlalchemy.create_engine(DATABASE_URL, pool_size=20)
 Base = declarative_base()
 
 # SessionFactory
-Session = sessionmaker(autocommit=False, bind=engine)
+SessionLocal = sessionmaker(bind=engine)
 
 def init_db():
     ''' Initializes the crimes table in the database. '''
