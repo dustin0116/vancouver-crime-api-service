@@ -18,7 +18,7 @@ from decimal import Decimal
 
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from sqlalchemy import extract, select
+from sqlalchemy import extract, select, func
 
 from ..database.pool import Session
 from ..models.crime_orm import Crime
@@ -70,3 +70,30 @@ async def read_all_crimes(year: int):
                     for crime in result
                  ])  # Convert each row to JSON format stored in dict
         return JSONResponse(content=crimes)
+
+@router.get('/crime-frequency/{year}')
+async def get_crime_frequency(year: int):
+    ''' Returns crime frequency by neighborhood for a specific year. '''
+    with session.begin():
+        start_date = datetime(year, 1, 1)
+        end_date = datetime(year+1, 1, 1)
+
+        # Count crimes per neighborhood for the given year
+        query = (
+            select(Crime.neighborhood, func.count(Crime.id))
+            .where(Crime.event_datetime >= start_date)
+            .where(Crime.event_datetime < end_date)
+            .group_by(Crime.neighborhood)
+        )
+
+        result = session.execute(query).all()
+
+        # Convert to a format suitable for frontend
+        crime_frequency = [
+            {
+                'neighborhood': row[0],
+                'crimeCount': row[1]
+            } for row in result
+        ]
+
+        return JSONResponse(content=crime_frequency)
