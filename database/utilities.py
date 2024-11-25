@@ -23,7 +23,7 @@ from .pool import SessionLocal
 session = SessionLocal()
 
 def load_csv_data():
-    '''Process the source csv dataset to the database.'''
+    ''' Process the source csv dataset to the database. '''
     with session.begin():
         with open(
             'sourcedata/crimedata_csv_AllNeighbourhoods_AllYears.csv',
