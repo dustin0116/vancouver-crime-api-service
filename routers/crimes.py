@@ -24,9 +24,9 @@ from ..models.crime_orm import Crime
 logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)  # Logs SQL statements
 
-router = APIRouter(prefix='/crimes')
+router = APIRouter()
 
-@router.get('/all_years')
+@router.get('/years')
 async def read_all_years():
     ''' Returns the years of the dataset. '''
     session = Session()
@@ -43,7 +43,7 @@ async def read_all_years():
     finally:
         session.close()
 
-@router.get('/all')
+@router.get('/crimes')
 async def read_all_crimes(year: int):
     ''' Returns all of the crimes within the specified year in the database. '''
     session = Session()
