@@ -43,7 +43,6 @@ def crime_json(crime):
         'y': crime.y
     }
 
-
 @router.get('/years')
 async def read_all_years():
     ''' Returns the years of the dataset. '''
