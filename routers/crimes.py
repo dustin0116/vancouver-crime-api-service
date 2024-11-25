@@ -12,7 +12,6 @@ Dependencies:
 - Session: Used for opening a session for database writing.
 - Crime: The ORM Model Class for crimes.
 '''
-import json
 import logging
 from datetime import datetime
 from decimal import Decimal
@@ -32,7 +31,6 @@ session = Session()
 
 def crime_json(crime):
     ''' Get JSON of a crime '''
-    print(crime.id)
     return {
         'id': crime.id,
         'case': crime.case,
@@ -68,5 +66,7 @@ async def read_all_crimes(year: int):
                  .where(Crime.event_datetime < end_date)
                 )
         result = session.execute(query).all()
-        crimes = [crime_json(crime[0]) for crime in result]  # Convert each row to dict
+        crimes = ([ crime_json(crime[0])
+                    for crime in result
+                 ])  # Convert each row to JSON format stored in dict
         return JSONResponse(content=crimes)
