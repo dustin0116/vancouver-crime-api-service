@@ -29,7 +29,7 @@ logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)  # Logs SQL statem
 router = APIRouter()
 session = SessionLocal()
 
-def crime_json(crime):
+def crime_json(crime: Crime):
     '''
     Get JSON of a crime
 
