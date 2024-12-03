@@ -15,7 +15,7 @@ FastAPI
 SQLAlchemy
 
     pip install SQLAlchemy
-  
+
 psycopg2
 
     pip install psycopg2
@@ -23,6 +23,11 @@ psycopg2
 python-dotenv
 
     pip install python-dotenv
+
+Install Dependencies by running
+
+    pip install -r requirements.txt
+
 
 ## How to Run
     DB_USERNAME=<YOUR_USERNAME> DB_PASSWORD=<YOUR_PASSWORD> fastapi dev main.py
