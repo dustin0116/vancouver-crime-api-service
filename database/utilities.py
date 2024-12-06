@@ -1,4 +1,4 @@
-'''
+"""
 utilities.py
 ------------
 
@@ -11,7 +11,8 @@ Dependencies:
 - SQLAlchemy: Used for checking database process errors.
 - Session: Used for opening a session for database writing.
 - Crime: The ORM Model Class for crimes.
-'''
+"""
+
 import csv
 from datetime import datetime
 
@@ -22,43 +23,43 @@ from .pool import SessionLocal
 
 session = SessionLocal()
 
+
 def load_csv_data():
-    ''' Process the source csv dataset to the database. '''
+    """Process the source csv dataset to the database."""
     with session.begin():
         with open(
-            'sourcedata/crimedata_csv_AllNeighbourhoods_AllYears.csv',
-            'r',
-            encoding='utf-8'
+            "sourcedata/crimedata_csv_AllNeighbourhoods_AllYears.csv",
+            "r",
+            encoding="utf-8",
         ) as f:
             reader = csv.DictReader(f)
             entries = []
-            # Prepare table entries
             for row in reader:
-                # Combine the columns into a single datetime object
-                year = int(row['YEAR'])
-                month = int(row['MONTH'])
-                day = int(row['DAY'])
-                hour = int(row['HOUR'])
-                minute = int(row['MINUTE'])
+                year = int(row["YEAR"])
+                month = int(row["MONTH"])
+                day = int(row["DAY"])
+                hour = int(row["HOUR"])
+                minute = int(row["MINUTE"])
                 event_datetime = datetime(year, month, day, hour, minute)
                 row_data = Crime(
-                    case = row['TYPE'],
-                    event_datetime = event_datetime,
-                    hundred_block = row['HUNDRED_BLOCK'],
-                    neighborhood = row['NEIGHBOURHOOD'],
-                    x = row['X'],
-                    y = row['Y']
+                    case=row["TYPE"],
+                    event_datetime=event_datetime,
+                    hundred_block=row["HUNDRED_BLOCK"],
+                    neighborhood=row["NEIGHBOURHOOD"],
+                    x=row["X"],
+                    y=row["Y"],
                 )
                 entries.append(row_data)
             session.add_all(entries)
 
+
 def is_table_empty(table_class):
-    '''
+    """
     Check if table is empty.
 
     Args:
         table_class (class): The ORM model class.
-    '''
+    """
     with session.begin():
         result = session.execute(select(table_class).limit(1)).fetchone() is not None
         return not result

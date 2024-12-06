@@ -1,4 +1,4 @@
-'''
+"""
 crime_orm.py
 ------------
 
@@ -8,14 +8,15 @@ Dependencies:
 -------------
 - SQLAlchemy: Used for ORM mapping.
 - Base: Used for SQLAlchemy model registry.
-'''
+"""
+
 from sqlalchemy import Column, DateTime, Integer, String
 
 from ..database.pool import Base
 
 
 class Crime(Base):
-    '''
+    """
     Represents a crime event from the database.
 
     Attributes:
@@ -26,8 +27,9 @@ class Crime(Base):
         neighborhood (str): The neighborhood where the crime occurred.
         x (str): The X coordinates of the crime.
         y (str): The Y coordinates of the crime.
-    '''
-    __tablename__ = 'crimes'
+    """
+
+    __tablename__ = "crimes"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     case = Column(String)
@@ -38,9 +40,9 @@ class Crime(Base):
     y = Column(String)
 
     def get_event_datetime(self):
-        ''' Get Date and Time. '''
+        """Get Date and Time."""
         return self.event_datetime
 
     def get_coordinates(self):
-        ''' Get coordinates of the crime. '''
+        """Get coordinates of the crime."""
         return self.x, self.y

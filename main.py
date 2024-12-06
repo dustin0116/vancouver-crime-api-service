@@ -1,4 +1,4 @@
-'''
+"""
 main.py
 -------
 
@@ -16,7 +16,8 @@ Dependencies:
 - load_csv_data: Used to load csv data into the database.
 - Crime: The ORM Model Class for crimes.
 - crimes: The crimes API route.
-'''
+"""
+
 import logging
 from contextlib import asynccontextmanager
 
@@ -29,11 +30,12 @@ from .models.crime_orm import Crime
 from .routers import crimes
 
 logging.basicConfig()
-logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)  # Logs SQL statements
+logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)  # Logs SQL statements
+
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    ''' Startup of the service initializes the table and processes the csv data. '''
+    """Startup of the service initializes the table and processes the csv data."""
     logging.info("Initializing database...")
     init_db()
     if is_table_empty(Crime):
@@ -43,11 +45,11 @@ async def lifespan(_: FastAPI):
         logging.info("Crime table already populated.")
     yield
 
+
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(crimes.router)
 
-# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allows all origins
