@@ -15,7 +15,7 @@ from sqlalchemy import Column, DateTime, Integer, String
 from ..database.pool import Base
 
 
-class Crime(Base):
+class Crime(Base):  # pylint: disable=too-few-public-methods
     """
     Represents a crime event from the database.
 
@@ -38,11 +38,3 @@ class Crime(Base):
     neighborhood = Column(String)
     x = Column(String)
     y = Column(String)
-
-    def get_event_datetime(self):
-        """Get Date and Time."""
-        return self.event_datetime
-
-    def get_coordinates(self):
-        """Get coordinates of the crime."""
-        return self.x, self.y

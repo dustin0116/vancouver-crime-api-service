@@ -7,10 +7,11 @@ This is the module that sets the APIs.
 Dependencies:
 -------------
 - APIRouter: Set the API URL route.
+- JSONResponse: For returning a JSON.
 - HTTPException: For raising HTTP errors.
-- SQLAlchemy: For extracting query results and error checking.
-- Session: Used for opening a session for database writing.
-- Crime: The ORM Model Class for crimes.
+- extract, func, select: For executing database actions.
+- SessionLocal: Used for opening a session for database writing.
+- Crime: The ORM Class for crimes.
 """
 
 import logging
@@ -25,28 +26,10 @@ from ..database.pool import SessionLocal
 from ..models.crime_orm import Crime
 
 logging.basicConfig()
-logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)  # Logs SQL statements
+logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 
 router = APIRouter()
 session = SessionLocal()
-
-
-def crime_json(crime: Crime):
-    """
-    Get JSON of a crime
-
-    Args:
-        crime (class): The Crime class.
-    """
-    return {
-        "id": crime.id,
-        "case": crime.case,
-        "date": crime.event_datetime.isoformat(),
-        "address": crime.hundred_block,
-        "neighborhood": crime.neighborhood,
-        "x": crime.x,
-        "y": crime.y,
-    }
 
 
 @router.get("/years")
@@ -106,3 +89,21 @@ async def get_crime_frequency(year: int):
             {"neighborhood": row[0], "crimeCount": row[1]} for row in result
         ]
         return JSONResponse(content=crime_frequency)
+
+
+def crime_json(crime: Crime):
+    """
+    Get JSON of a crime
+
+    Args:
+        crime (class): The Crime class.
+    """
+    return {
+        "id": crime.id,
+        "case": crime.case,
+        "date": crime.event_datetime.isoformat(),
+        "address": crime.hundred_block,
+        "neighborhood": crime.neighborhood,
+        "x": crime.x,
+        "y": crime.y,
+    }
